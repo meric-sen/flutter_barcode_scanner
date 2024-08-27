@@ -585,17 +585,13 @@ extension BarcodeScannerViewController: AVCaptureMetadataOutputObjectsDelegate {
             // If the found metadata is equal to the QR code metadata (or barcode) then update the status label's text and set the bounds
             //            let barCodeObject = videoPreviewLayer?.transformedMetadataObject(for: metadataObj)
             //qrCodeFrameView?.frame = barCodeObject!.bounds
-            var code = metadataObj.stringValue
-if code != nil {
-  if metadataObj.type == AVMetadataObject.ObjectType.ean13 && code!.hasPrefix("0") {
-      code = String(code!.dropFirst())
-  }
-  if(SwiftFlutterBarcodeScannerPlugin.isContinuousScan){
-      SwiftFlutterBarcodeScannerPlugin.onBarcodeScanReceiver(barcode: code!)
-  }else{
-      launchApp(decodedURL: code!)
-  }
-}
+            if metadataObj.stringValue != nil {
+                if(SwiftFlutterBarcodeScannerPlugin.isContinuousScan){
+                    SwiftFlutterBarcodeScannerPlugin.onBarcodeScanReceiver(barcode: metadataObj.stringValue!)
+                }else{
+                    launchApp(decodedURL: metadataObj.stringValue!)
+                }
+            }
         }
     }
 }
